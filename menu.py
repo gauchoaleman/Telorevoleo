@@ -1,21 +1,54 @@
 # coding: utf-8
 import pilasengine
-import jugar
+#import jugar
+
+class Jugador(pilasengine.actores.Actor):
+    def iniciar(self,nombre):
+        self.imagen = "imagenes/"+nombre+".jpg"
+        self.escala = 0.1
+
+
+class Proyectil(pilasengine.actores.Actor):
+    def iniciar(self,nombre):
+        self.imagen = "imagenes/proyectil_"+nombre+".jpg"
+
+
+class Jugar(pilasengine.escenas.Escena):
+
+    def iniciar(self,nombre):
+        print ("A jugar "+nombre+"!!!")
+        #ArrancarJuego(nombre)
+        pilas.actores.vincular(Proyectil)
+        pilas.actores.vincular(Jugador)
+        jugador = Jugador(pilas,nombre)
+
+        #jugador.aprender(self.habilidades.Disparar,
+        #                 municion="Proyectil",
+        #                 )
+
+        #jugador.aprender("moverseComoCoche")
+        pass
+
+    def ejecutar(self):
+        pass
+
+def ArrancarJuego(nombre):
+    pilas.actores.vincular(Proyectil)
 
 def QuienJuega(nombre):
-    global jugador
-
     print("nombrearg "+ nombre)
     print( "banda1" )
     #pilas.actores.vincular(Jugador)
     print( "banda2")
-    jugador = Jugador(pilas)
+    #jugador = Jugador(pilas)
     print( "banda3")
-    jugador.nombre = nombre
+    #jugador.nombre = nombre
     print( "banda4")
-    print( "jugador.nombre: "+jugador.nombre)
-    pilas.escenas.vincular(jugar.Jugar)
+    #print( "jugador.nombre: "+jugador.nombre)
+    pilas.escenas.vincular(Jugar)
+    print("banda5")
     pilas.escenas.Jugar(nombre)
+    print("banda6")
     pass
 
 

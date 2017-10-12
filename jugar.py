@@ -1,4 +1,5 @@
 import pilasengine
+from menu import pilas
 #import selecciona_jugador
 
 class Jugador(pilasengine.actores.Actor):
@@ -18,6 +19,7 @@ class Jugar(pilasengine.escenas.Escena):
 
     def iniciar(self,nombre):
         print ("A jugar "+nombre+"!!!")
+        #ArrancarJuego(nombre)
         #pilas.actores.vincular(Proyectil)
 
         #jugador = Jugador(self,nombre)
@@ -31,3 +33,6 @@ class Jugar(pilasengine.escenas.Escena):
 
     def ejecutar(self):
         pass
+
+def ArrancarJuego(nombre):
+    pilas.actores.vincular(Proyectil)
