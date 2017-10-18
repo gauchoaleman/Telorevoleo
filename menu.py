@@ -70,13 +70,15 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
         texto_actores.escala = 2
 
-        pilas.actores.Menu(
+        opcionesmenujugadores = \
             [
                 ('rama', self.QuienJuega('rama')),
                 ('stefan', self.QuienJuega('stefan')),
                 ('fede', self.QuienJuega('fede')),
                 ('nacho', self.QuienJuega('nacho')),
-            ])
+            ]
+
+        menujugadores = pilas.actores.Menu(opciones=opcionesmenujugadores)
         pass
 
     def ejecutar(self):
@@ -94,7 +96,7 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
         texto_menu.y = 200
         texto_menu.color = pilas.colores.Color(255, 0, 0, 0)
         texto_menu.escala = [1, 4.5]
-        #texto_menu.rotacion = [0, 360 * 3]
+        texto_menu.rotacion = [0, 360 * 3]
         opcionesmenuppal = \
             [
                 ('iniciar juego', iniciar_juego),
