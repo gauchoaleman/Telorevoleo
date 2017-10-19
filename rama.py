@@ -3,9 +3,14 @@ import pilasengine
 
 pilas = pilasengine.iniciar()
 
-def colisionaproybombas(bomba, proyectil):
+def capturar(proyectil, bomba):
+    proyectil.eliminar()
+    bomba.explotar()
+
+def colisionaproybombas(self,bomba, proyectil):
     bomba.eliminar()
     proyectil.eliminar()
+    print("colision")
 
 
 def colisionajugbombas(jugador,bomba):
@@ -20,6 +25,9 @@ class Proyectil(pilasengine.actores.Actor):
     def iniciar(self):
         self.imagen = "imagenes/proyectil_rama.jpg"
         self.escala = 0.1
+
+    def actualizar(self):
+        self.rotacion += 50
 
 pilas.actores.vincular(Proyectil)
 
@@ -39,7 +47,8 @@ bomba = pilas.actores.Bomba()
 bomba.x=-200
 bombas = pilas.actores.Grupo()
 bombas.agregar(bomba*5)
-pilas.colisiones.agregar(bombas,proyectil, colisionaproybombas)
+#pilas.colisiones.agregar(bomba,proyectil,colisionaproybombas)
+pilas.colisiones.agregar('proyectil', 'bomba', capturar)
 #pilas.colisiones.agregar(jugador, bombas, colisionajugbombas)
 
 
