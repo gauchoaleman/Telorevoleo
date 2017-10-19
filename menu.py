@@ -45,21 +45,7 @@ class Jugar(pilasengine.escenas.Escena):
     #    print( "JUgador.iniciar")
 
 class SeleccionJugador(pilasengine.escenas.Escena):
-    def QuienJuega(self,nombre):
-        print("nombrearg " + nombre)
-        print("banda1")
-        # pilas.actores.vincular(Jugador)
-        print("banda2")
-        # jugador = Jugador(pilas)
-        print("banda3")
-        # jugador.nombre = nombre
-        print("banda4")
-        # print( "jugador.nombre: "+jugador.nombre)
-        #pilas.escenas.vincular(Jugar)
-        print("banda5")
-        #pilas.escenas.Jugar(nombre)
-        print("banda6")
-        pass
+
 
     def iniciar(self):
         #pilas.fondos.Color(pilas.colores.negro)
@@ -82,6 +68,22 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         pass
 
     def ejecutar(self):
+        pass
+
+    def QuienJuega(self,nombre):
+        print("nombrearg " + nombre)
+        print("banda1")
+        # pilas.actores.vincular(Jugador)
+        print("banda2")
+        # jugador = Jugador(pilas)
+        print("banda3")
+        # jugador.nombre = nombre
+        print("banda4")
+        # print( "jugador.nombre: "+jugador.nombre)
+        #pilas.escenas.vincular(Jugar)
+        print("banda5")
+        #pilas.escenas.Jugar(nombre)
+        print("banda6")
         pass
 
 
