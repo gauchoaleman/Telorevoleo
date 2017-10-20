@@ -1,16 +1,28 @@
 # coding: utf-8
 import pilasengine
 #import jugar
+def proybomba(proyectil, bomba):
+    proyectil.eliminar()
+    bomba.explotar()
+
+def jugbomb(jugador, bomba):
+    jugador.eliminar()
+    print("Game over!")
+    exit()
 
 class Jugador(pilasengine.actores.Actor):
     def iniciar(self):
-        self.imagenpers = "imagenes/rama.jpg"
-        self.escala = 0.1
+        self.imagen = "imagenes/rama.jpg"
+        self.escala = 0.05
 
 
 class Proyectil(pilasengine.actores.Actor):
     def iniciar(self):
-        self.imagenproy = "imagenes/proyectil_rama.jpg"
+        self.imagen = "imagenes/proyectil_rama.jpg"
+        self.escala = 0.1
+
+    def actualizar(self):
+        self.rotacion += 12
 
 
 class Cargar(pilasengine.escenas.Escena):
@@ -22,14 +34,18 @@ class Cargar(pilasengine.escenas.Escena):
         pilas.actores.vincular(Jugador)
         print("jugar2")
         jugador = Jugador(pilas)
-
-        proyectil = Proyectil(pilas)
         print("jugar3")
-        #jugador.aprender(self.habilidades.Disparar,
-        #                 municion="Proyectil",
-        #                 )
+        jugador.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
         print("jugar4")
         jugador.aprender("moverseComoCoche")
+        print("jugar5")
+        bomba = pilas.actores.Bomba()
+        bomba.x = -200
+        bombas = pilas.actores.Grupo()
+        bombas.agregar(bomba * 5)
+        pilas.colisiones.agregar('proyectil', 'bomba', proybomba)
+        pilas.colisiones.agregar('jugador', 'bomba', jugbomb)
+
         pass
 
 
