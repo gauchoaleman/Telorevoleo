@@ -4,19 +4,18 @@ import pilasengine
 
 class Jugador(pilasengine.actores.Actor):
     def iniciar(self):
-        self.imagenpers = "imagenes/"+nombre+".jpg"
+        self.imagenpers = "imagenes/rama.jpg"
         self.escala = 0.1
 
 
 class Proyectil(pilasengine.actores.Actor):
-    def iniciar(self,nombre):
-        self.imagenproy = "imagenes/proyectil_"+nombre+".jpg"
+    def iniciar(self):
+        self.imagenproy = "imagenes/proyectil_rama.jpg"
 
 
-class Jugar(pilasengine.escenas.Escena):
+class Cargar(pilasengine.escenas.Escena):
 
-    def iniciar(self,nombre):
-        print ("A jugar "+nombre+"!!!")
+    def iniciar(self):
         #ArrancarJuego(nombre)
         pilas.actores.vincular(Proyectil)
         print("jugar1")
@@ -26,9 +25,9 @@ class Jugar(pilasengine.escenas.Escena):
 
         proyectil = Proyectil(pilas)
         print("jugar3")
-        jugador.aprender(self.habilidades.Disparar,
-                         municion="Proyectil",
-                         )
+        #jugador.aprender(self.habilidades.Disparar,
+        #                 municion="Proyectil",
+        #                 )
         print("jugar4")
         jugador.aprender("moverseComoCoche")
         pass
@@ -58,32 +57,32 @@ class SeleccionJugador(pilasengine.escenas.Escena):
 
         opcionesmenujugadores = \
             [
-                ('rama', self.QuienJuega('rama')),
-                ('stefan', self.QuienJuega('stefan')),
-                ('fede', self.QuienJuega('fede')),
-                ('nacho', self.QuienJuega('nacho')),
+                ('rama', self.JuegaRama),
+                ('stefan', self.QuienJuega),
+                ('fede', self.QuienJuega),
+                ('nacho', self.QuienJuega),
             ]
 
         menujugadores = pilas.actores.Menu(opciones=opcionesmenujugadores)
-        pass
 
     def ejecutar(self):
         pass
 
-    def QuienJuega(self,nombre):
-        print("nombrearg " + nombre)
-        print("banda1")
-        # pilas.actores.vincular(Jugador)
-        print("banda2")
-        # jugador = Jugador(pilas)
-        print("banda3")
-        # jugador.nombre = nombre
-        print("banda4")
-        # print( "jugador.nombre: "+jugador.nombre)
+    def QuienJuega(self):
+
+        #jugador = Jugador(pilas)
+        #jugador.nombre = nombre
+        print "pasa en quienjuega"
+        #print( "jugador.nombre: "+jugador.nombre)
         #pilas.escenas.vincular(Jugar)
-        print("banda5")
         #pilas.escenas.Jugar(nombre)
-        print("banda6")
+
+        pass
+
+    def JuegaRama(self):
+        pilas.escenas.vincular(Cargar)
+        #pilas.escenas.vincular(Cargar(pilas))
+        pilas.escenas.Cargar()
         pass
 
 
