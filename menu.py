@@ -1,6 +1,8 @@
 # coding: utf-8
 import pilasengine
 #import jugar
+
+nombre = ''
 def proybomba(proyectil, bomba):
     proyectil.eliminar()
     bomba.explotar()
@@ -12,13 +14,15 @@ def jugbomb(jugador, bomba):
 
 class Jugador(pilasengine.actores.Actor):
     def iniciar(self):
-        self.imagen = "imagenes/rama.jpg"
+        global nombre
+        self.imagen = "imagenes/"+nombre+".jpg"
         self.escala = 0.05
 
 
 class Proyectil(pilasengine.actores.Actor):
     def iniciar(self):
-        self.imagen = "imagenes/proyectil_rama.jpg"
+        global nombre
+        self.imagen = "imagenes/proyectil_"+nombre+".jpg"
         self.escala = 0.1
 
     def actualizar(self):
@@ -74,9 +78,9 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         opcionesmenujugadores = \
             [
                 ('rama', self.JuegaRama),
-                ('stefan', self.QuienJuega),
-                ('fede', self.QuienJuega),
-                ('nacho', self.QuienJuega),
+                ('stefan', self.JuegaStefan),
+                ('fede', self.JuegaFede),
+                ('nacho', self.JuegaNacho),
             ]
 
         menujugadores = pilas.actores.Menu(opciones=opcionesmenujugadores)
@@ -96,11 +100,40 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         pass
 
     def JuegaRama(self):
+        global nombre
+
+        nombre="rama"
         pilas.escenas.vincular(Cargar)
         #pilas.escenas.vincular(Cargar(pilas))
         pilas.escenas.Cargar()
         pass
 
+    def JuegaStefan(self):
+        global nombre
+
+        nombre="stefan"
+        pilas.escenas.vincular(Cargar)
+        #pilas.escenas.vincular(Cargar(pilas))
+        pilas.escenas.Cargar()
+        pass
+
+    def JuegaFede(self):
+        global nombre
+
+        nombre="fede"
+        pilas.escenas.vincular(Cargar)
+        #pilas.escenas.vincular(Cargar(pilas))
+        pilas.escenas.Cargar()
+        pass
+
+    def JuegaNacho(self):
+        global nombre
+
+        nombre="nacho"
+        pilas.escenas.vincular(Cargar)
+        #pilas.escenas.vincular(Cargar(pilas))
+        pilas.escenas.Cargar()
+        pass
 
 class PantallaBienvenida(pilasengine.escenas.Escena):
 
