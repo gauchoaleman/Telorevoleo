@@ -3,6 +3,7 @@ import pilasengine
 #import jugar
 
 nombre = ''
+
 def proybomba(proyectil, bomba):
     proyectil.eliminar()
     bomba.explotar()
@@ -40,6 +41,8 @@ class Cargar(pilasengine.escenas.Escena):
         jugador = Jugador(pilas)
         print("jugar3")
         jugador.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
+        jugador.aprender("LimitadoABordesDePantalla")
+
         print("jugar4")
         jugador.aprender("moverseComoCoche")
         print("jugar5")
