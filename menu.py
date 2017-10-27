@@ -150,6 +150,12 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
         texto_menu.color = pilas.colores.Color(255, 0, 0, 0)
         texto_menu.escala = [1, 4.5]
         texto_menu.rotacion = [0, 360 * 3]
+        texto_trucho = pilas.actores.Texto("Un Juego Trucho")
+        texto_trucho.aprender("LimitadoABordesDePantalla")
+        texto_trucho.aprender("RebotarComoPelota")
+        texto_trucho.y = 150
+        texto_trucho.color = pilas.colores.Color(255, 255, 255, 255)
+        texto_trucho.escala = 3
         opcionesmenuppal = \
             [
                 ('iniciar juego', iniciar_juego),
@@ -163,6 +169,39 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
     def ejecutar(self):
         pass
 
+class Ayuda(pilasengine.escenas.Escena):
+
+    def iniciar(self):
+        pilas.fondos.Color(pilas.colores.negro)
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondo_menu.jpg')
+        texto_ayuda = pilas.actores.Texto("Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n"
+                                         "Suspendisse lacinia eros eu commodo tincidunt. P\n"
+                                         "raesent rhoncus massa non euismod laoreet.\n"
+                                         "Maecenas at nibh id urna gravida imperdiet nec sit amet libero. "
+                                         "Aliquam pulvinar justo in ipsum tincidunt, et sodales turpis congue. "
+                                         "Mauris urna quam, mollis nec lectus ac, elementum mollis purus. "
+                                         "Etiam ullamcorper nec diam vitae suscipit. In vulputate posuere erat. "
+                                         "Aliquam vulputate elit vitae nisl ultrices placerat. "
+                                         "Praesent nec vulputate purus, id aliquet ligula. "
+                                         "Vivamus tempus bibendum aliquam.")
+        print("band2")
+        texto_ayuda.y = 200
+        texto_ayuda.color = pilas.colores.Color(255, 255, 255, 255)
+        texto_ayuda.magnitud = 2
+
+        opcionesmenuayuda = \
+            [
+                ('Iniciar juego', iniciar_juego),
+                ('Salir', salir_del_juego)
+            ]
+
+        menuayuda = pilas.actores.Menu(opciones=opcionesmenuayuda)
+        pass
+
+    def ejecutar(self):
+        pass
+
 def iniciar_juego():
     print("iniciar juego")
     pilas.escenas.vincular(SeleccionJugador)
@@ -170,6 +209,9 @@ def iniciar_juego():
 
 
 def mostrar_ayuda():
+    pilas.escenas.vincular(Ayuda)
+    pilas.escenas.Ayuda()
+
     print("Ayuda")
 
 def salir_del_juego():
