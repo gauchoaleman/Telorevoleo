@@ -91,17 +91,6 @@ class SeleccionJugador(pilasengine.escenas.Escena):
     def ejecutar(self):
         pass
 
-    def QuienJuega(self):
-
-        #jugador = Jugador(pilas)
-        #jugador.nombre = nombre
-        print "pasa en quienjuega"
-        #print( "jugador.nombre: "+jugador.nombre)
-        #pilas.escenas.vincular(Jugar)
-        #pilas.escenas.Jugar(nombre)
-
-        pass
-
     def JuegaRama(self):
         global nombre
 
@@ -175,16 +164,7 @@ class Ayuda(pilasengine.escenas.Escena):
         pilas.fondos.Color(pilas.colores.negro)
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondo_menu.jpg')
-        texto_ayuda = pilas.actores.Texto("Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n"
-                                         "Suspendisse lacinia eros eu commodo tincidunt. P\n"
-                                         "raesent rhoncus massa non euismod laoreet.\n"
-                                         "Maecenas at nibh id urna gravida imperdiet nec sit amet libero. "
-                                         "Aliquam pulvinar justo in ipsum tincidunt, et sodales turpis congue. "
-                                         "Mauris urna quam, mollis nec lectus ac, elementum mollis purus. "
-                                         "Etiam ullamcorper nec diam vitae suscipit. In vulputate posuere erat. "
-                                         "Aliquam vulputate elit vitae nisl ultrices placerat. "
-                                         "Praesent nec vulputate purus, id aliquet ligula. "
-                                         "Vivamus tempus bibendum aliquam.")
+        texto_ayuda = pilas.actores.Texto("Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n")
         print("band2")
         texto_ayuda.y = 200
         texto_ayuda.color = pilas.colores.Color(255, 255, 255, 255)
