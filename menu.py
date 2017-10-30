@@ -60,12 +60,6 @@ class Cargar(pilasengine.escenas.Escena):
         pass
 
 
-#class Jugador(pilasengine.actores.Actor):
-    #nombre = "nombrejugador"
-
-    #def iniciar(self):
-    #    print( "JUgador.iniciar")
-
 class SeleccionJugador(pilasengine.escenas.Escena):
 
 
