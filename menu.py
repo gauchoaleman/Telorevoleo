@@ -1,21 +1,23 @@
 # coding: utf-8
 import pilasengine
-#import jugar
 
 nombre = ''
 
-def proybomba(proyectil, bomba):
+def proybomba(proyectil, bombamov):
     proyectil.eliminar()
-    bomba.explotar()
+    bombamov.explotar()
+    bombamov = pilas.actores.Bombamov()
 
-def jugbomb(jugador, bomba):
+def jugbomb(jugador, bombamov):
     jugador.eliminar()
     print("Game over!")
     exit()
 
 class Jugador(pilasengine.actores.Actor):
+    nombre
     def iniciar(self):
         global nombre
+        self.nombre = nombre
         self.imagen = "imagenes/"+nombre+".jpg"
         self.escala = 0.05
 
@@ -29,11 +31,26 @@ class Proyectil(pilasengine.actores.Actor):
     def actualizar(self):
         self.rotacion += 12
 
+class Bombamov(pilasengine.actores.Bomba):
+
+    def iniciar(self):
+        self.aprender("LimitadoABordesDePantalla")
+        self.x = pilas.azar(50,300)
+        self.y= pilas.azar(-100,-50)
+        pass
+
+    def actualizar(self):
+        self.x += pilas.azar(-15,15)
+        self.y += pilas.azar(-15,15)
+        #self.x +=
+        rotacion = [0, 360 * 3]
+
 
 class Cargar(pilasengine.escenas.Escena):
 
     def iniciar(self):
-        #ArrancarJuego(nombre)
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel1.jpg')
         pilas.actores.vincular(Proyectil)
         print("jugar1")
         pilas.actores.vincular(Jugador)
@@ -46,13 +63,18 @@ class Cargar(pilasengine.escenas.Escena):
         print("jugar4")
         jugador.aprender("moverseComoCoche")
         print("jugar5")
-        bomba = pilas.actores.Bomba()
-        bomba.x = -200
-        bombas = pilas.actores.Grupo()
-        bombas.agregar(bomba * 5)
-        pilas.colisiones.agregar('proyectil', 'bomba', proybomba)
-        pilas.colisiones.agregar('jugador', 'bomba', jugbomb)
+        pilas.actores.vincular(Bombamov)
+        print("jugar6")
+        bombamov = pilas.actores.Bombamov()
+        print("jugar7")
 
+        #bombamov.x = -200
+        bombasmov = pilas.actores.Grupo()
+        print("jugar8")
+        bombasmov.agregar(bombamov * 5)
+        print("jugar9")
+        pilas.colisiones.agregar('proyectil', 'bombamov', proybomba)
+        pilas.colisiones.agregar('jugador', 'bombamov', jugbomb)
         pass
 
 
@@ -61,14 +83,14 @@ class Cargar(pilasengine.escenas.Escena):
 
 
 class SeleccionJugador(pilasengine.escenas.Escena):
-
-
     def iniciar(self):
         #pilas.fondos.Color(pilas.colores.negro)
         #FondoMenu = pilas.fondos.Fondo()
         #FondoMenu.imagen = pilas.imagenes.cargar('imagenes/maradona.jpg')
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondo_seljug.jpg')
         texto_actores = pilas.actores.Texto("Elegi tu jugador")
-        texto_actores.y = 200
+        texto_actores.y = 100
         texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
         texto_actores.escala = 2
 
@@ -78,6 +100,7 @@ class SeleccionJugador(pilasengine.escenas.Escena):
                 ('stefan', self.JuegaStefan),
                 ('fede', self.JuegaFede),
                 ('nacho', self.JuegaNacho),
+                ('facu', self.JuegaFacu),
             ]
 
         menujugadores = pilas.actores.Menu(opciones=opcionesmenujugadores)
@@ -121,6 +144,15 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         pilas.escenas.Cargar()
         pass
 
+    def JuegaFacu(self):
+        global nombre
+
+        nombre="facu"
+        pilas.escenas.vincular(Cargar)
+        #pilas.escenas.vincular(Cargar(pilas))
+        pilas.escenas.Cargar()
+        pass
+
 class PantallaBienvenida(pilasengine.escenas.Escena):
 
     def iniciar(self):
@@ -137,7 +169,7 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
         texto_trucho.aprender("LimitadoABordesDePantalla")
         texto_trucho.aprender("RebotarComoPelota")
         texto_trucho.y = 150
-        texto_trucho.color = pilas.colores.Color(255, 255, 255, 255)
+        texto_trucho.color = pilas.colores.Color(0, 0,255,255)
         texto_trucho.escala = 3
         opcionesmenuppal = \
             [
@@ -155,26 +187,33 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
 class Ayuda(pilasengine.escenas.Escena):
 
     def iniciar(self):
-        pilas.fondos.Color(pilas.colores.negro)
-        FondoMenu = pilas.fondos.Fondo()
-        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondo_menu.jpg')
-        texto_ayuda = pilas.actores.Texto("Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n")
-        print("band2")
-        texto_ayuda.y = 200
-        texto_ayuda.color = pilas.colores.Color(255, 255, 255, 255)
-        texto_ayuda.magnitud = 2
-
-        opcionesmenuayuda = \
-            [
-                ('Iniciar juego', iniciar_juego),
-                ('Salir', salir_del_juego)
-            ]
-
-        menuayuda = pilas.actores.Menu(opciones=opcionesmenuayuda)
+        pilas.fondos.Fondo("imagenes/pregunta.gif")
+        self.crear_texto_ayuda()
+        self.pulsa_tecla_escape.conectar(self.cuando_pulsa_tecla)
         pass
+
+    def crear_texto_ayuda(self):
+        self.pilas.actores.Texto("AYUDA", y=200)
+        self.pilas.actores.Texto(MENSAJE_AYUDA)
+        #self.pilas.actores.Texto.color = pilas.colores.Color(0, 0, 0, 0)
+        self.pilas.avisar("Pulsa ESC para regresar")
+
+    def cuando_pulsa_tecla(self, *k, **kw):
+        self.pilas.escenas.PantallaBienvenida()
 
     def ejecutar(self):
         pass
+
+MENSAJE_AYUDA = """
+El jugador se mueve con las flechas y 
+dispara presionando espacio.
+Nivel 1: Disparar los proyectiles bajando bombas. 
+El contacto con una bomba finaliza el juego
+Nivel 2: Disparar naves.
+El contacto con una nave o el disparo de una nave
+finalizan el juego.
+Nivel 3: Sorpresa.
+"""
 
 def iniciar_juego():
     print("iniciar juego")
