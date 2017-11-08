@@ -35,7 +35,7 @@ class Bombamov(pilasengine.actores.Bomba):
     def iniciar(self):
         self.aprender("LimitadoABordesDePantalla")
         self.fuentebomba = pilas.azar(1,4)
-        print( "self.fuentebomba")
+        print("fuentebomba"+self.fuentebomba)
 
         if( self.fuentebomba==1):
             self.x = 320
