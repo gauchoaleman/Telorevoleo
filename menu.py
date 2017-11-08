@@ -10,8 +10,7 @@ def proybomba(proyectil, bombamov):
 
 def jugbomb(jugador, bombamov):
     jugador.eliminar()
-    print("Game over!")
-    exit()
+    pilas.escenas.PantallaBienvenida()
 
 class Jugador(pilasengine.actores.Actor):
     nombre
@@ -35,7 +34,22 @@ class Bombamov(pilasengine.actores.Bomba):
 
     def iniciar(self):
         self.aprender("LimitadoABordesDePantalla")
-        self.x = pilas.azar(50,300)
+        self.fuentebomba = pilas.azar(1,4)
+        print( "self.fuentebomba")
+
+        if( self.fuentebomba==1):
+            self.x = 320
+            self.y = 0
+        if (self.fuentebomba == 2):
+            self.x = 0
+            self.y = 240
+        if (self.fuentebomba == 3):
+            self.x = -320
+            self.y = 0
+        if (self.fuentebomba == 4):
+            self.x = 0
+            self.y = -240
+
         self.y= pilas.azar(-100,-50)
         pass
 
@@ -199,7 +213,7 @@ class Ayuda(pilasengine.escenas.Escena):
         self.pilas.avisar("Pulsa ESC para regresar")
 
     def cuando_pulsa_tecla(self, *k, **kw):
-        self.pilas.escenas.PantallaBienvenida()
+        pilas.escenas.PantallaBienvenida()
 
     def ejecutar(self):
         pass
@@ -232,7 +246,6 @@ def salir_del_juego():
     exit()
 
 pilas = pilasengine.iniciar()
-
 
 print("band0")
 pilas.escenas.vincular(PantallaBienvenida)
