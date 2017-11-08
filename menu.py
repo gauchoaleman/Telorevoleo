@@ -35,7 +35,7 @@ class Bombamov(pilasengine.actores.Bomba):
     def iniciar(self):
         self.aprender("LimitadoABordesDePantalla")
         self.fuentebomba = pilas.azar(1,4)
-        print("fuentebomba"+self.fuentebomba)
+        #print("fuentebomba"+self.fuentebomba)
 
         if( self.fuentebomba==1):
             self.x = 320
@@ -49,14 +49,12 @@ class Bombamov(pilasengine.actores.Bomba):
         if (self.fuentebomba == 4):
             self.x = 0
             self.y = -240
-
-        self.y= pilas.azar(-100,-50)
         pass
 
     def actualizar(self):
         self.x += pilas.azar(-15,15)
         self.y += pilas.azar(-15,15)
-        #self.x +=
+        self
         rotacion = [0, 360 * 3]
 
 
@@ -65,9 +63,9 @@ class Cargar(pilasengine.escenas.Escena):
     def iniciar(self):
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel1.jpg')
-        pilas.actores.vincular(Proyectil)
+
         print("jugar1")
-        pilas.actores.vincular(Jugador)
+
         print("jugar2")
         jugador = Jugador(pilas)
         print("jugar3")
@@ -77,7 +75,7 @@ class Cargar(pilasengine.escenas.Escena):
         print("jugar4")
         jugador.aprender("moverseComoCoche")
         print("jugar5")
-        pilas.actores.vincular(Bombamov)
+
         print("jugar6")
         bombamov = pilas.actores.Bombamov()
         print("jugar7")
@@ -126,8 +124,6 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         global nombre
 
         nombre="rama"
-        pilas.escenas.vincular(Cargar)
-        #pilas.escenas.vincular(Cargar(pilas))
         pilas.escenas.Cargar()
         pass
 
@@ -135,8 +131,6 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         global nombre
 
         nombre="stefan"
-        pilas.escenas.vincular(Cargar)
-        #pilas.escenas.vincular(Cargar(pilas))
         pilas.escenas.Cargar()
         pass
 
@@ -144,8 +138,6 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         global nombre
 
         nombre="fede"
-        pilas.escenas.vincular(Cargar)
-        #pilas.escenas.vincular(Cargar(pilas))
         pilas.escenas.Cargar()
         pass
 
@@ -153,8 +145,6 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         global nombre
 
         nombre="nacho"
-        pilas.escenas.vincular(Cargar)
-        #pilas.escenas.vincular(Cargar(pilas))
         pilas.escenas.Cargar()
         pass
 
@@ -162,8 +152,6 @@ class SeleccionJugador(pilasengine.escenas.Escena):
         global nombre
 
         nombre="facu"
-        pilas.escenas.vincular(Cargar)
-        #pilas.escenas.vincular(Cargar(pilas))
         pilas.escenas.Cargar()
         pass
 
@@ -231,12 +219,12 @@ Nivel 3: Sorpresa.
 
 def iniciar_juego():
     print("iniciar juego")
-    pilas.escenas.vincular(SeleccionJugador)
+
     pilas.escenas.SeleccionJugador()
 
 
 def mostrar_ayuda():
-    pilas.escenas.vincular(Ayuda)
+
     pilas.escenas.Ayuda()
 
     print("Ayuda")
@@ -246,7 +234,12 @@ def salir_del_juego():
     exit()
 
 pilas = pilasengine.iniciar()
-
+pilas.actores.vincular(Proyectil)
+pilas.actores.vincular(Jugador)
+pilas.escenas.vincular(Ayuda)
+pilas.escenas.vincular(SeleccionJugador)
+pilas.escenas.vincular(Cargar)
+pilas.actores.vincular(Bombamov)
 print("band0")
 pilas.escenas.vincular(PantallaBienvenida)
 pilas.escenas.PantallaBienvenida()
