@@ -52,10 +52,8 @@ class Bombamov(pilasengine.actores.Bomba):
         pass
 
     def actualizar(self):
-        self.x += pilas.azar(-15,15)
-        self.y += pilas.azar(-15,15)
-        self
-        rotacion = [0, 360 * 3]
+        self.x += pilas.azar(-17,17)
+        self.y += pilas.azar(-17,17)
 
 
 class Cargar(pilasengine.escenas.Escena):
@@ -240,7 +238,6 @@ pilas.escenas.vincular(Ayuda)
 pilas.escenas.vincular(SeleccionJugador)
 pilas.escenas.vincular(Cargar)
 pilas.actores.vincular(Bombamov)
-print("band0")
 pilas.escenas.vincular(PantallaBienvenida)
 pilas.escenas.PantallaBienvenida()
 print("band3")
