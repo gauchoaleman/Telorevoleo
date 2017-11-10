@@ -1,12 +1,22 @@
 # coding: utf-8
 import pilasengine
-
+pilas = pilasengine.iniciar()
 nombre = ''
 
+
+
 def proybomba(proyectil, bombamov):
+    global puntaje
     proyectil.eliminar()
     bombamov.explotar()
     bombamov = pilas.actores.Bombamov()
+    print( "antes de aumentar puntaje")
+    puntaje.aumentar(10)
+    print("puntaje obtenido"+str(puntaje.obtener()))
+    #texto_puntaje = pilas.actores.Texto(str(puntaje.obtener()))
+    #texto_puntaje.y = 100
+    #texto_puntaje.color = pilas.colores.amarillo
+    #texto_puntaje.escala = 1
 
 def jugbomb(jugador, bombamov):
     jugador.eliminar()
@@ -59,6 +69,9 @@ class Bombamov(pilasengine.actores.Bomba):
 class Cargar(pilasengine.escenas.Escena):
 
     def iniciar(self):
+        global enemigos
+        global puntaje
+        puntaje = pilas.actores.Puntaje(280, 220, color=pilas.colores.blanco,texto=0)
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel1.jpg')
 
@@ -74,19 +87,21 @@ class Cargar(pilasengine.escenas.Escena):
         jugador.aprender("moverseComoCoche")
         print("jugar5")
 
-        print("jugar6")
-        bombamov = pilas.actores.Bombamov()
-        print("jugar7")
-
+        x=0
+        for x in range (1,6):
+            pilas.actores.Bombamov()
         #bombamov.x = -200
-        bombasmov = pilas.actores.Grupo()
+        #bombasmov = pilas.actores.Grupo()
         print("jugar8")
-        bombasmov.agregar(bombamov * 5)
+
+        #bombasmov.agregar(bombamov * 5)
+
         print("jugar9")
         pilas.colisiones.agregar('proyectil', 'bombamov', proybomba)
         pilas.colisiones.agregar('jugador', 'bombamov', jugbomb)
         pass
 
+        #texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
 
     def ejecutar(self):
         pass
@@ -94,9 +109,6 @@ class Cargar(pilasengine.escenas.Escena):
 
 class SeleccionJugador(pilasengine.escenas.Escena):
     def iniciar(self):
-        #pilas.fondos.Color(pilas.colores.negro)
-        #FondoMenu = pilas.fondos.Fondo()
-        #FondoMenu.imagen = pilas.imagenes.cargar('imagenes/maradona.jpg')
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondo_seljug.jpg')
         texto_actores = pilas.actores.Texto("Elegi tu jugador")
@@ -178,7 +190,7 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
                 ('salir', salir_del_juego),
             ]
 
-        menuppal = pilas.actores.Menu(opciones=opcionesmenuppal)
+        menuppal = pilas.actores.Menu(opciones=opcionesmenuppal,color_normal=pilasengine.colores.amarillo, color_resaltado=pilasengine.colores.blanco)
         pass
 
     def ejecutar(self):
@@ -231,7 +243,8 @@ def salir_del_juego():
     print("Tengo que salir...")
     exit()
 
-pilas = pilasengine.iniciar()
+
+#puntaje.z = -10
 pilas.actores.vincular(Proyectil)
 pilas.actores.vincular(Jugador)
 pilas.escenas.vincular(Ayuda)
