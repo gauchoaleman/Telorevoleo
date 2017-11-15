@@ -1,7 +1,11 @@
 # coding: utf-8
 import pilasengine
+from pilasengine.actores import Moneda
+
 pilas = pilasengine.iniciar()
 nombre = ''
+
+
 
 class Cargar2(pilasengine.escenas.Escena):
 
@@ -13,18 +17,19 @@ class Cargar2(pilasengine.escenas.Escena):
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel2.jpg')
         print("jugar1")
         print("jugar2")
-        jugador = Jugador(pilas)
+        jugador2 = Jugador(pilas)
         print("jugar3")
-        jugador.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
-        jugador.aprender("LimitadoABordesDePantalla")
+        jugador2.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
+        jugador2.aprender("LimitadoABordesDePantalla")
 
         print("jugar4")
-        jugador.aprender("moverseComoCoche")
+        jugador2.aprender("moverseComoCoche")
         print("jugar5")
 
         x=0
-        for x in range (1,6):
-            pilas.actores.Navemov()
+        #for x in range (1,6):
+        print("jugar6")
+        pilas.actores.Navemov()
         #bombamov.x = -200
         #bombasmov = pilas.actores.Grupo()
         print("jugar8")
@@ -34,12 +39,59 @@ class Cargar2(pilasengine.escenas.Escena):
         print("jugar9")
         pilas.colisiones.agregar('proyectil', 'navemov', proynave)
         pilas.colisiones.agregar('jugador', 'navemov', jugnave)
+        pilas.colisiones.agregar('jugador', 'proyectilnave', jugproynave)
         pass
-        pilas.tareas.agregar(5, CargarNivel2)
-        #texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
+
+class Navemov(pilasengine.actores.Nave):
+
+    def iniciar(self):
+        print("Navemov1")
+        self.aprender("LimitadoABordesDePantalla")
+        print("Navemov2")
+        self.fuentenave = pilas.azar(1,4)
+        print("Navemov3")
+        #print("fuentebomba"+self.fuentebomba)
+
+        if( self.fuentenave==1):
+            self.x = 320
+            self.y = 0
+        if (self.fuentenave == 2):
+            self.x = 0
+            self.y = 240
+        if (self.fuentenave == 3):
+            self.x = -320
+            self.y = 0
+        if (self.fuentenave == 4):
+            self.x = 0
+            self.y = -240
+        pass
+
+    def actualizar(self):
+        self.x += pilas.azar(-17,17)
+        self.y += pilas.azar(-17,17)
 
 
+def jugproynave(jugador, proyectilnave):
+    jugador.eliminar()
+    pilas.escenas.PantallaBienvenida()
 
+def jugnave(jugador, navemov):
+    jugador.eliminar()
+    pilas.escenas.PantallaBienvenida()
+
+def proynave(proyectil, navemov):
+    global puntaje2
+    proyectil.eliminar()
+    navemov.explotar()
+    navemov = pilas.actores.Navemov()
+    print( "antes de aumentar puntaje")
+    puntaje2.aumentar(10)
+    print("puntaje obtenido"+str(puntaje2.obtener()))
+
+def monedajugador(moneda,jugador):
+    global puntaje
+    moneda.eliminar()
+    puntaje.aumentar(50)
 
 def proybomba(proyectil, bombamov):
     global puntaje
@@ -49,10 +101,6 @@ def proybomba(proyectil, bombamov):
     print( "antes de aumentar puntaje")
     puntaje.aumentar(10)
     print("puntaje obtenido"+str(puntaje.obtener()))
-    #texto_puntaje = pilas.actores.Texto(str(puntaje.obtener()))
-    #texto_puntaje.y = 100
-    #texto_puntaje.color = pilas.colores.amarillo
-    #texto_puntaje.escala = 1
 
 def jugbomb(jugador, bombamov):
     jugador.eliminar()
@@ -97,9 +145,10 @@ class Bombamov(pilasengine.actores.Bomba):
             self.y = -240
         pass
 
-    def actualizar(self):
-        self.x += pilas.azar(-17,17)
-        self.y += pilas.azar(-17,17)
+class Monedarev(pilasengine.actores.Moneda):
+
+    def iniciar(self):
+        self.aprender("LimitadoABordesDePantalla")
 
 
 class Cargar(pilasengine.escenas.Escena):
@@ -126,17 +175,19 @@ class Cargar(pilasengine.escenas.Escena):
         x=0
         for x in range (1,6):
             pilas.actores.Bombamov()
+            pilas.actores.Monedarev()
         #bombamov.x = -200
-        #bombasmov = pilas.actores.Grupo()
+        #monedas = pilas.actores.Grupo()
         print("jugar8")
 
-        #bombasmov.agregar(bombamov * 5)
+        #monedas.agregar(monedas * 5)
 
         print("jugar9")
         pilas.colisiones.agregar('proyectil', 'bombamov', proybomba)
         pilas.colisiones.agregar('jugador', 'bombamov', jugbomb)
+        pilas.colisiones.agregar('moneda', 'jugador', monedajugador)
         pass
-        pilas.tareas.agregar(5, CargarNivel2)
+        #pilas.tareas.agregar(5, CargarNivel2)
         #texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
 
     def ejecutar(self):
@@ -291,6 +342,8 @@ pilas.escenas.vincular(SeleccionJugador)
 pilas.escenas.vincular(Cargar)
 pilas.escenas.vincular(Cargar2)
 pilas.actores.vincular(Bombamov)
+pilas.actores.vincular(Navemov)
+pilas.actores.vincular(Monedarev)
 pilas.escenas.vincular(PantallaBienvenida)
 pilas.escenas.PantallaBienvenida()
 print("band3")
