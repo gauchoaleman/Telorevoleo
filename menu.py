@@ -3,6 +3,42 @@ import pilasengine
 pilas = pilasengine.iniciar()
 nombre = ''
 
+class Cargar2(pilasengine.escenas.Escena):
+
+    def iniciar(self):
+        global enemigos
+        global puntaje
+        global puntaje2
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel2.jpg')
+        print("jugar1")
+        print("jugar2")
+        jugador = Jugador(pilas)
+        print("jugar3")
+        jugador.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
+        jugador.aprender("LimitadoABordesDePantalla")
+
+        print("jugar4")
+        jugador.aprender("moverseComoCoche")
+        print("jugar5")
+
+        x=0
+        for x in range (1,6):
+            pilas.actores.Navemov()
+        #bombamov.x = -200
+        #bombasmov = pilas.actores.Grupo()
+        print("jugar8")
+
+        #bombasmov.agregar(bombamov * 5)
+
+        print("jugar9")
+        pilas.colisiones.agregar('proyectil', 'navemov', proynave)
+        pilas.colisiones.agregar('jugador', 'navemov', jugnave)
+        pass
+        pilas.tareas.agregar(5, CargarNivel2)
+        #texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
+
+
 
 
 def proybomba(proyectil, bombamov):
@@ -100,12 +136,14 @@ class Cargar(pilasengine.escenas.Escena):
         pilas.colisiones.agregar('proyectil', 'bombamov', proybomba)
         pilas.colisiones.agregar('jugador', 'bombamov', jugbomb)
         pass
-
+        pilas.tareas.agregar(5, CargarNivel2)
         #texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
 
     def ejecutar(self):
         pass
 
+def CargarNivel2():
+    pilas.escenas.Cargar2()
 
 class SeleccionJugador(pilasengine.escenas.Escena):
     def iniciar(self):
@@ -191,6 +229,7 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
             ]
 
         menuppal = pilas.actores.Menu(opciones=opcionesmenuppal,color_normal=pilasengine.colores.amarillo, color_resaltado=pilasengine.colores.blanco)
+
         pass
 
     def ejecutar(self):
@@ -250,6 +289,7 @@ pilas.actores.vincular(Jugador)
 pilas.escenas.vincular(Ayuda)
 pilas.escenas.vincular(SeleccionJugador)
 pilas.escenas.vincular(Cargar)
+pilas.escenas.vincular(Cargar2)
 pilas.actores.vincular(Bombamov)
 pilas.escenas.vincular(PantallaBienvenida)
 pilas.escenas.PantallaBienvenida()
