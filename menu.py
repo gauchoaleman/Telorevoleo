@@ -1,4 +1,6 @@
 # coding: utf-8
+import random
+
 import pilasengine
 from pilasengine.actores import Moneda
 
@@ -10,46 +12,57 @@ nombre = ''
 class Cargar2(pilasengine.escenas.Escena):
 
     def iniciar(self):
+        global pilas
         global enemigos
         global puntaje
         global puntaje2
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel2.jpg')
-        print("jugar1")
-        print("jugar2")
+        print("jugar2.1")
+        print("jugar2.2")
+        puntaje2 = pilas.actores.Puntaje(280, 220, color=pilas.colores.blanco, texto=puntaje.obtener())
         jugador2 = Jugador(pilas)
-        print("jugar3")
+        print("jugar2.3")
         jugador2.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
         jugador2.aprender("LimitadoABordesDePantalla")
 
-        print("jugar4")
+        print("jugar2.4")
         jugador2.aprender("moverseComoCoche")
-        print("jugar5")
+        print("jugar2.5")
 
         x=0
         #for x in range (1,6):
-        print("jugar6")
-        pilas.actores.Navemov()
+        print("jugar2.6")
+        x = 0
+        for x in range(1, 6):
+            pilas.actores.Navemov()
+            pilas.actores.Monedarev()
         #bombamov.x = -200
         #bombasmov = pilas.actores.Grupo()
-        print("jugar8")
+        print("jugar2.8")
 
         #bombasmov.agregar(bombamov * 5)
 
-        print("jugar9")
+        print("jugar2.9")
         pilas.colisiones.agregar('proyectil', 'navemov', proynave)
         pilas.colisiones.agregar('jugador', 'navemov', jugnave)
         pilas.colisiones.agregar('jugador', 'proyectilnave', jugproynave)
         pass
 
-class Navemov(pilasengine.actores.Nave):
+class Navemov(pilasengine.actores.Actor):
 
     def iniciar(self):
         print("Navemov1")
         self.aprender("LimitadoABordesDePantalla")
         print("Navemov2")
+        self.aprender("disparar")
         self.fuentenave = pilas.azar(1,4)
         print("Navemov3")
+        self.aprender("LimitadoABordesDePantalla");
+        self.escala = 0.05
+        self.aprender(pilas.habilidades.PuedeExplotar)
+        self.imagen = 'imagenes/nave.jpg'
+
         #print("fuentebomba"+self.fuentebomba)
 
         if( self.fuentenave==1):
@@ -65,11 +78,20 @@ class Navemov(pilasengine.actores.Nave):
             self.x = 0
             self.y = -240
         pass
+    def explotar(self):
+        #TODO agregar explosión
+        print ("Bum")
+        self.eliminar()
+
+    def dispara(self):
+        self.disparar()
+        return True
+
+    pilas.tareas.agregar(1, dispara)
 
     def actualizar(self):
         self.x += pilas.azar(-17,17)
         self.y += pilas.azar(-17,17)
-
 
 def jugproynave(jugador, proyectilnave):
     jugador.eliminar()
@@ -83,6 +105,7 @@ def proynave(proyectil, navemov):
     global puntaje2
     proyectil.eliminar()
     navemov.explotar()
+    #explosion = pilas.actores.explosion.Explosion(x=navemov.x,y=navemov.y)
     navemov = pilas.actores.Navemov()
     print( "antes de aumentar puntaje")
     puntaje2.aumentar(10)
@@ -92,6 +115,7 @@ def monedajugador(moneda,jugador):
     global puntaje
     moneda.eliminar()
     puntaje.aumentar(50)
+    CargarNivel2()
 
 def proybomba(proyectil, bombamov):
     global puntaje
@@ -103,6 +127,7 @@ def proybomba(proyectil, bombamov):
     print("puntaje obtenido"+str(puntaje.obtener()))
 
 def jugbomb(jugador, bombamov):
+    bombamov.explotar()
     jugador.eliminar()
     pilas.escenas.PantallaBienvenida()
 
@@ -144,12 +169,21 @@ class Bombamov(pilasengine.actores.Bomba):
             self.x = 0
             self.y = -240
         pass
+    def actualizar(self):
+        self.x += pilas.azar(-17,17)
+        self.y += pilas.azar(-17,17)
 
-class Monedarev(pilasengine.actores.Moneda):
+class Monedarev(pilasengine.actores.Actor):
 
     def iniciar(self):
-        self.aprender("LimitadoABordesDePantalla")
+        self.aprender("LimitadoABordesDePantalla");
+        self.imagen = 'imagenes/moneda.png'
+        self.escala = 0.2
+        self.x= random.randint(-320, 320)
+        self.y = random.randint(-240, 240)
 
+    def actualizar(self):
+        self.rotacion += 10
 
 class Cargar(pilasengine.escenas.Escena):
 
@@ -185,8 +219,7 @@ class Cargar(pilasengine.escenas.Escena):
         print("jugar9")
         pilas.colisiones.agregar('proyectil', 'bombamov', proybomba)
         pilas.colisiones.agregar('jugador', 'bombamov', jugbomb)
-        pilas.colisiones.agregar('moneda', 'jugador', monedajugador)
-        pass
+        pilas.colisiones.agregar('monedarev', 'jugador', monedajugador)
         #pilas.tareas.agregar(5, CargarNivel2)
         #texto_actores.color = pilas.colores.Color(255, 0, 0, 0)
 
@@ -289,7 +322,7 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
 class Ayuda(pilasengine.escenas.Escena):
 
     def iniciar(self):
-        pilas.fondos.Fondo("imagenes/pregunta.gif")
+        pilas.fondos.Fondo("imagenes/pregunta.jpg")
         self.crear_texto_ayuda()
         self.pulsa_tecla_escape.conectar(self.cuando_pulsa_tecla)
         pass
@@ -310,10 +343,12 @@ MENSAJE_AYUDA = """
 El jugador se mueve con las flechas y 
 dispara presionando espacio.
 Nivel 1: Disparar los proyectiles bajando bombas. 
-El contacto con una bomba finaliza el juego
+El contacto con una bomba finaliza el juego  
+Para pasar de nivel hay que juntar las monedas
 Nivel 2: Disparar naves.
 El contacto con una nave o el disparo de una nave
 finalizan el juego.
+Para pasar de nivel hay que juntar las monedas
 Nivel 3: Sorpresa.
 """
 
@@ -332,6 +367,8 @@ def mostrar_ayuda():
 def salir_del_juego():
     print("Tengo que salir...")
     exit()
+
+
 
 
 #puntaje.z = -10
