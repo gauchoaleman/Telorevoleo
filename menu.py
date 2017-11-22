@@ -55,7 +55,7 @@ class Navemov(pilasengine.actores.Actor):
         print("Navemov1")
         self.aprender("LimitadoABordesDePantalla")
         print("Navemov2")
-        self.aprender("disparar")
+        self.aprender("disparar",angulo_salida_disparo=90)
         self.fuentenave = pilas.azar(1,4)
         print("Navemov3")
         self.aprender("LimitadoABordesDePantalla");
@@ -78,6 +78,7 @@ class Navemov(pilasengine.actores.Actor):
             self.x = 0
             self.y = -240
         pass
+
     def explotar(self):
         #TODO agregar explosión
         print ("Bum")
@@ -92,6 +93,7 @@ class Navemov(pilasengine.actores.Actor):
     def actualizar(self):
         self.x += pilas.azar(-17,17)
         self.y += pilas.azar(-17,17)
+        self.rotacion = pilas.azar(-180,180)
 
 def jugproynave(jugador, proyectilnave):
     jugador.eliminar()
