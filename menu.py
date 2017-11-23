@@ -58,10 +58,10 @@ class Navemov(pilasengine.actores.Actor):
         self.aprender("disparar",angulo_salida_disparo=90)
         self.fuentenave = pilas.azar(1,4)
         print("Navemov3")
-        self.aprender("LimitadoABordesDePantalla");
+        self.aprender("LimitadoABordesDePantalla")
         self.escala = 0.05
         self.aprender(pilas.habilidades.PuedeExplotar)
-        self.imagen = 'imagenes/nave.jpg'
+        self.imagen = 'imagenes/nave.png'
 
         #print("fuentebomba"+self.fuentebomba)
 
@@ -79,10 +79,10 @@ class Navemov(pilasengine.actores.Actor):
             self.y = -240
         pass
 
-    def explotar(self):
-        #TODO agregar explosión
-        print ("Bum")
-        self.eliminar()
+    #def explotar(self):
+    #    #TODO agregar explosión
+    #    print ("Bum")
+    #    self.eliminar()
 
     def dispara(self):
         self.disparar()
@@ -106,7 +106,7 @@ def jugnave(jugador, navemov):
 def proynave(proyectil, navemov):
     global puntaje2
     proyectil.eliminar()
-    navemov.explotar()
+    navemov.eliminar_y_explotar()
     #explosion = pilas.actores.explosion.Explosion(x=navemov.x,y=navemov.y)
     navemov = pilas.actores.Navemov()
     print( "antes de aumentar puntaje")
@@ -138,14 +138,14 @@ class Jugador(pilasengine.actores.Actor):
     def iniciar(self):
         global nombre
         self.nombre = nombre
-        self.imagen = "imagenes/"+nombre+".jpg"
+        self.imagen = "imagenes/"+nombre+".png"
         self.escala = 0.05
 
 
 class Proyectil(pilasengine.actores.Actor):
     def iniciar(self):
         global nombre
-        self.imagen = "imagenes/proyectil_"+nombre+".jpg"
+        self.imagen = "imagenes/proyectil_"+nombre+".png"
         self.escala = 0.1
 
     def actualizar(self):
