@@ -6,7 +6,7 @@ from pilasengine.actores import Moneda, Energia
 
 pilas = pilasengine.iniciar()
 nombre = ''
-puntaje3=0
+#puntaje3=0
 barra = pilas.actores.Energia(progreso=0, ancho=400, alto=25)
 
 class Pinguino(pilasengine.actores.Actor):
@@ -22,6 +22,7 @@ class Cargar3(pilasengine.escenas.Escena):
         global pilas
         global puntaje
         global puntaje2
+        global puntaje3
 
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel3.jpg')
@@ -56,21 +57,23 @@ def proyjefe(proyectil, jefe):
     global barra
     global puntaje3
     global impactosjefe
-    puntaje3 += 100
+    puntaje3.aumentar(100)
     impactosjefe +=1
     print "le dimos al jefe"
 
     barra.progreso += 10
     if impactosjefe >= 5:
         print( "**********Ganaste***********")
+        print(puntaje3.obtener()," Puntos")
+        print ()
         pilas.escenas.PantallaBienvenida()
 
 
-def jugjefe(jugador, navemov):
+def jugjefe(jugador, jefe):
     jugador.eliminar()
     pilas.escenas.PantallaBienvenida()
 
-def jugpinguino(jugador, navemov):
+def jugpinguino(jugador, pinguino):
     jugador.eliminar()
     pilas.escenas.PantallaBienvenida()
 
