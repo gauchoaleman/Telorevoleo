@@ -2,17 +2,18 @@
 import random
 
 import pilasengine
-from pilasengine.actores import Moneda
+from pilasengine.actores import Moneda, Energia
 
 pilas = pilasengine.iniciar()
 nombre = ''
 puntaje3=0
+barra = pilas.actores.Energia(progreso=0, ancho=400, alto=25)
 
 class Pinguino(pilasengine.actores.Actor):
     def iniciar(self):
         self.imagen = "imagenes/pinguino.png"
     def actualizar(self):
-        self.rotacion += 12
+        self.rotacion += 22
 
 class Cargar3(pilasengine.escenas.Escena):
 
@@ -21,6 +22,7 @@ class Cargar3(pilasengine.escenas.Escena):
         global pilas
         global puntaje
         global puntaje2
+
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel3.jpg')
         print("jugar3.1")
@@ -49,9 +51,20 @@ class Cargar3(pilasengine.escenas.Escena):
         pilas.colisiones.agregar('jugador', 'pinguino', jugpinguino)
         pass
 
+impactosjefe=0
 def proyjefe(proyectil, jefe):
+    global barra
+    global puntaje3
+    global impactosjefe
+    puntaje3 += 100
+    impactosjefe +=1
     print "le dimos al jefe"
-    pilas.escenas.PantallaBienvenida()
+
+    barra.progreso += 10
+    if impactosjefe >= 5:
+        print( "**********Ganaste***********")
+        pilas.escenas.PantallaBienvenida()
+
 
 def jugjefe(jugador, navemov):
     jugador.eliminar()
@@ -74,7 +87,7 @@ class Jefe(pilasengine.actores.Actor):
         self.escala = 0.4
         #self.aprender("PuedeExplotar")
         self.imagen = 'imagenes/jefe.png'
-        self.tarea_disparar= pilas.tareas.siempre(1,self.realizar_disparo)
+        self.tarea_disparar= pilas.tareas.siempre(0.5,self.realizar_disparo)
 
         self.x = 320
         self.y = 0
@@ -97,7 +110,7 @@ class Jefe(pilasengine.actores.Actor):
     def actualizar(self):
         self.x += pilas.azar(-17,17)
         self.y += pilas.azar(-17,17)
-        self.rotacion = (pilas.azar(-45,+45))
+        self.rotacion = (pilas.azar(-180,+180))
         #[0, 360 * 3]
 
 
@@ -194,7 +207,7 @@ class Navemov(pilasengine.actores.Actor):
     def actualizar(self):
         self.x += pilas.azar(-17,17)
         self.y += pilas.azar(-17,17)
-        self.rotacion = (pilas.azar(-45,+45))
+        self.rotacion = (pilas.azar(-180,+180))
         #[0, 360 * 3]
 
 def jugproynave(jugador, proyectilnave):
@@ -501,6 +514,7 @@ pilas.actores.vincular(Proyectil)
 pilas.actores.vincular(BalaNivel2)
 pilas.actores.vincular(Pinguino)
 pilas.actores.vincular(Jugador)
+#pilas.actores.vincular(Energia)
 pilas.escenas.vincular(Ayuda)
 pilas.escenas.vincular(SeleccionJugador)
 pilas.escenas.vincular(Cargar)
