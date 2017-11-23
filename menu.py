@@ -6,8 +6,104 @@ from pilasengine.actores import Moneda
 
 pilas = pilasengine.iniciar()
 nombre = ''
+puntaje3=0
+
+class Pinguino(pilasengine.actores.Actor):
+    def iniciar(self):
+        self.imagen = "imagenes/pinguino.png"
+    def actualizar(self):
+        self.rotacion += 12
+
+class Cargar3(pilasengine.escenas.Escena):
+
+    def iniciar(self):
+        print "ininiv3.1"
+        global pilas
+        global puntaje
+        global puntaje2
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel3.jpg')
+        print("jugar3.1")
+        print("jugar3.2")
+        puntaje3 = pilas.actores.Puntaje(280, 220, color=pilas.colores.blanco, texto=puntaje2.obtener())
+        jugador3 = Jugador(pilas)
+        print("jugar3.3")
+        jugador3.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
+        jugador3.aprender("LimitadoABordesDePantalla")
+
+        print("jugar3.4")
+        jugador3.aprender("moverseComoCoche")
+        print("jugar3.5")
+
+        print("jugar3.6")
+        pilas.actores.Jefe()
+        #bombamov.x = -200
+        #bombasmov = pilas.actores.Grupo()
+        print("jugar3.8")
+
+        #bombasmov.agregar(bombamov * 5)
+
+        print("jugar2.9")
+        pilas.colisiones.agregar('proyectil', 'jefe', proyjefe)
+        pilas.colisiones.agregar('jugador', 'jefe', jugjefe)
+        pilas.colisiones.agregar('jugador', 'pinguino', jugpinguino)
+        pass
+
+def proyjefe(proyectil, jefe):
+    print "le dimos al jefe"
+    pilas.escenas.PantallaBienvenida()
+
+def jugjefe(jugador, navemov):
+    jugador.eliminar()
+    pilas.escenas.PantallaBienvenida()
+
+def jugpinguino(jugador, navemov):
+    jugador.eliminar()
+    pilas.escenas.PantallaBienvenida()
+
+class Jefe(pilasengine.actores.Actor):
+
+    def iniciar(self):
+        print("Jefe1")
+        self.aprender("LimitadoABordesDePantalla")
+        print("Jefe2")
+        self.aprender("disparar",angulo_salida_disparo=90,control=None,municion=Proyectil)
+        self.aprender("puedeexplotar")
+        print("Jefe3")
+        self.aprender("LimitadoABordesDePantalla")
+        self.escala = 0.4
+        #self.aprender("PuedeExplotar")
+        self.imagen = 'imagenes/jefe.png'
+        self.tarea_disparar= pilas.tareas.siempre(1,self.realizar_disparo)
+
+        self.x = 320
+        self.y = 0
+
+        pass
+
+    #def explotar(self):
+    #    #TODO agregar explosión
+    #    print ("Bum")
+    #    self.eliminar()
+
+    def realizar_disparo(self):
+        self.aprender("disparar", control=None, municion='Pinguino',
+                      angulo_salida_disparo=pilas.azar(250, 290))  # , frecuencia_de_disparo =1)
+        self.disparar()
+        return True
+
+    #pilas.tareas.agregar(1, dispara)
+
+    def actualizar(self):
+        self.x += pilas.azar(-17,17)
+        self.y += pilas.azar(-17,17)
+        self.rotacion = (pilas.azar(-45,+45))
+        #[0, 360 * 3]
 
 
+class BalaNivel2(pilasengine.actores.Actor):
+    def iniciar(self):
+        self.imagen = "imagenes/balanivel2.png"
 
 class Cargar2(pilasengine.escenas.Escena):
 
@@ -30,8 +126,6 @@ class Cargar2(pilasengine.escenas.Escena):
         jugador2.aprender("moverseComoCoche")
         print("jugar2.5")
 
-        x=0
-        #for x in range (1,6):
         print("jugar2.6")
         x = 0
         for x in range(1, 6):
@@ -46,8 +140,11 @@ class Cargar2(pilasengine.escenas.Escena):
         print("jugar2.9")
         pilas.colisiones.agregar('proyectil', 'navemov', proynave)
         pilas.colisiones.agregar('jugador', 'navemov', jugnave)
-        pilas.colisiones.agregar('jugador', 'proyectilnave', jugproynave)
+        pilas.colisiones.agregar('jugador', 'balanivel2', jugproynave)
+        pilas.colisiones.agregar('monedarev', 'jugador', monedajugador2)
         pass
+
+
 
 class Navemov(pilasengine.actores.Actor):
 
@@ -55,13 +152,15 @@ class Navemov(pilasengine.actores.Actor):
         print("Navemov1")
         self.aprender("LimitadoABordesDePantalla")
         print("Navemov2")
-        self.aprender("disparar",angulo_salida_disparo=90)
+        self.aprender("disparar",angulo_salida_disparo=90,control=None)
+        self.aprender("puedeexplotar")
         self.fuentenave = pilas.azar(1,4)
         print("Navemov3")
         self.aprender("LimitadoABordesDePantalla")
         self.escala = 0.05
-        self.aprender(pilas.habilidades.PuedeExplotar)
+        self.aprender("PuedeExplotar")
         self.imagen = 'imagenes/nave.png'
+        self.tarea_disparar= pilas.tareas.siempre(2,self.realizar_disparo)
 
         #print("fuentebomba"+self.fuentebomba)
 
@@ -84,16 +183,19 @@ class Navemov(pilasengine.actores.Actor):
     #    print ("Bum")
     #    self.eliminar()
 
-    def dispara(self):
+    def realizar_disparo(self):
+        self.aprender("disparar", control=None, municion='BalaNivel2',
+                      angulo_salida_disparo=pilas.azar(250, 290))  # , frecuencia_de_disparo =1)
         self.disparar()
         return True
 
-    pilas.tareas.agregar(1, dispara)
+    #pilas.tareas.agregar(1, dispara)
 
     def actualizar(self):
         self.x += pilas.azar(-17,17)
         self.y += pilas.azar(-17,17)
-        self.rotacion = pilas.azar(-180,180)
+        self.rotacion = (pilas.azar(-45,+45))
+        #[0, 360 * 3]
 
 def jugproynave(jugador, proyectilnave):
     jugador.eliminar()
@@ -106,18 +208,35 @@ def jugnave(jugador, navemov):
 def proynave(proyectil, navemov):
     global puntaje2
     proyectil.eliminar()
-    navemov.eliminar_y_explotar()
+    navemov.eliminar()
+    #navemov.explotar()
     #explosion = pilas.actores.explosion.Explosion(x=navemov.x,y=navemov.y)
     navemov = pilas.actores.Navemov()
     print( "antes de aumentar puntaje")
     puntaje2.aumentar(10)
     print("puntaje obtenido"+str(puntaje2.obtener()))
 
+monedascomidas2 = 0
+def monedajugador2(moneda,jugador):
+    global puntaje2
+    global monedascomidas2
+    moneda.eliminar()
+    puntaje2.aumentar(50)
+    monedascomidas2 +=1
+    if monedascomidas2 >= 1:
+        monedascomidas2 = 0
+        CargarNivel3()
+
+monedascomidas1 = 0
 def monedajugador(moneda,jugador):
     global puntaje
+    global monedascomidas1
     moneda.eliminar()
     puntaje.aumentar(50)
-    CargarNivel2()
+    monedascomidas1 +=1
+    if monedascomidas1 >= 1:
+        monedascomidas1 = 0
+        CargarNivel2()
 
 def proybomba(proyectil, bombamov):
     global puntaje
@@ -230,6 +349,10 @@ class Cargar(pilasengine.escenas.Escena):
 
 def CargarNivel2():
     pilas.escenas.Cargar2()
+
+def CargarNivel3():
+    print "por cargar nivel3"
+    pilas.escenas.Cargar3()
 
 class SeleccionJugador(pilasengine.escenas.Escena):
     def iniciar(self):
@@ -375,11 +498,15 @@ def salir_del_juego():
 
 #puntaje.z = -10
 pilas.actores.vincular(Proyectil)
+pilas.actores.vincular(BalaNivel2)
+pilas.actores.vincular(Pinguino)
 pilas.actores.vincular(Jugador)
 pilas.escenas.vincular(Ayuda)
 pilas.escenas.vincular(SeleccionJugador)
 pilas.escenas.vincular(Cargar)
 pilas.escenas.vincular(Cargar2)
+pilas.escenas.vincular(Cargar3)
+pilas.actores.vincular(Jefe)
 pilas.actores.vincular(Bombamov)
 pilas.actores.vincular(Navemov)
 pilas.actores.vincular(Monedarev)
