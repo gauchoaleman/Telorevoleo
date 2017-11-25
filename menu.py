@@ -7,7 +7,7 @@ from pilasengine.actores import Moneda, Energia
 pilas = pilasengine.iniciar()
 nombre = ''
 #puntaje3=0
-barra = pilas.actores.Energia(progreso=0, ancho=400, alto=25)
+
 
 class Pinguino(pilasengine.actores.Actor):
     def iniciar(self):
@@ -23,12 +23,14 @@ class Cargar3(pilasengine.escenas.Escena):
         global puntaje
         global puntaje2
         global puntaje3
+        global barra
 
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/fondonivel3.jpg')
         print("jugar3.1")
         print("jugar3.2")
         puntaje3 = pilas.actores.Puntaje(280, 220, color=pilas.colores.blanco, texto=puntaje2.obtener())
+        barra = pilas.actores.Energia(progreso=100, ancho=300, alto=20,x=150, y=175,color_relleno=pilas.colores.rojo)
         jugador3 = Jugador(pilas)
         print("jugar3.3")
         jugador3.aprender("disparar",municion="Proyectil",angulo_salida_disparo=90)
@@ -52,21 +54,14 @@ class Cargar3(pilasengine.escenas.Escena):
         pilas.colisiones.agregar('jugador', 'pinguino', jugpinguino)
         pass
 
-impactosjefe=0
 def proyjefe(proyectil, jefe):
     global barra
     global puntaje3
-    global impactosjefe
     global puntajefinal
     puntaje3.aumentar(100)
-    impactosjefe +=1
-    print "le dimos al jefe"
 
-    barra.progreso += 10
-    if impactosjefe >= 5:
-        print( "**********Ganaste***********")
-        puntajefinal=puntaje3.obtener()
-        print((str)(puntajefinal)+" Puntos")
+    barra.progreso -= 5
+    if barra.progreso <= 0:
         pilas.escenas.Ganaste()
 
 
@@ -479,12 +474,13 @@ class Ganaste(pilasengine.escenas.Escena):
 
     def crear_texto_ayuda(self):
         global puntajefinal
+        global puntaje3
         pilas.fondos.Color(pilas.colores.negro)
         FondoMenu = pilas.fondos.Fondo()
         FondoMenu.imagen = pilas.imagenes.cargar('imagenes/ganaste.jpg')
 
         # texto_menu.rotacion = [0, 360 * 3]
-        texto_trucho = pilas.actores.Texto("Hiciste "+(str)(puntajefinal)+" Puntos")
+        texto_trucho = pilas.actores.Texto("Hiciste "+(str)(puntaje3.obtener())+" Puntos")
         texto_trucho.aprender("LimitadoABordesDePantalla")
         texto_trucho.rotacion = [0, 360 * 3]
         texto_trucho.y =75
