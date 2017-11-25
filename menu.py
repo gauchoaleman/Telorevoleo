@@ -57,6 +57,7 @@ def proyjefe(proyectil, jefe):
     global barra
     global puntaje3
     global impactosjefe
+    global puntajefinal
     puntaje3.aumentar(100)
     impactosjefe +=1
     print "le dimos al jefe"
@@ -64,18 +65,18 @@ def proyjefe(proyectil, jefe):
     barra.progreso += 10
     if impactosjefe >= 5:
         print( "**********Ganaste***********")
-        print(puntaje3.obtener()," Puntos")
-        print ()
-        pilas.escenas.PantallaBienvenida()
+        puntajefinal=puntaje3.obtener()
+        print((str)(puntajefinal)+" Puntos")
+        pilas.escenas.Ganaste()
 
 
 def jugjefe(jugador, jefe):
     jugador.eliminar()
-    pilas.escenas.PantallaBienvenida()
+    pilas.escenas.GameOver()
 
 def jugpinguino(jugador, pinguino):
     jugador.eliminar()
-    pilas.escenas.PantallaBienvenida()
+    pilas.escenas.GameOver()
 
 class Jefe(pilasengine.actores.Actor):
 
@@ -90,7 +91,7 @@ class Jefe(pilasengine.actores.Actor):
         self.escala = 0.4
         #self.aprender("PuedeExplotar")
         self.imagen = 'imagenes/jefe.png'
-        self.tarea_disparar= pilas.tareas.siempre(0.5,self.realizar_disparo)
+        self.tarea_disparar= pilas.tareas.siempre(0.3,self.realizar_disparo)
 
         self.x = 320
         self.y = 0
@@ -214,12 +215,16 @@ class Navemov(pilasengine.actores.Actor):
         #[0, 360 * 3]
 
 def jugproynave(jugador, proyectilnave):
+    global monedascomidas2
     jugador.eliminar()
-    pilas.escenas.PantallaBienvenida()
+    monedascomidas2=0
+    pilas.escenas.GameOver()
 
 def jugnave(jugador, navemov):
+    global monedascomidas2
     jugador.eliminar()
-    pilas.escenas.PantallaBienvenida()
+    monedascomidas2 = 0
+    pilas.escenas.GameOver()
 
 def proynave(proyectil, navemov):
     global puntaje2
@@ -239,7 +244,7 @@ def monedajugador2(moneda,jugador):
     moneda.eliminar()
     puntaje2.aumentar(50)
     monedascomidas2 +=1
-    if monedascomidas2 >= 1:
+    if monedascomidas2 >= 2:
         monedascomidas2 = 0
         CargarNivel3()
 
@@ -250,7 +255,7 @@ def monedajugador(moneda,jugador):
     moneda.eliminar()
     puntaje.aumentar(50)
     monedascomidas1 +=1
-    if monedascomidas1 >= 1:
+    if monedascomidas1 >= 2:
         monedascomidas1 = 0
         CargarNivel2()
 
@@ -263,10 +268,13 @@ def proybomba(proyectil, bombamov):
     puntaje.aumentar(10)
     print("puntaje obtenido"+str(puntaje.obtener()))
 
+
 def jugbomb(jugador, bombamov):
+    global monedascomidas1
     bombamov.explotar()
     jugador.eliminar()
-    pilas.escenas.PantallaBienvenida()
+    monedascomidas1=0
+    pilas.escenas.GameOver()
 
 class Jugador(pilasengine.actores.Actor):
     nombre
@@ -460,6 +468,64 @@ class PantallaBienvenida(pilasengine.escenas.Escena):
     def ejecutar(self):
         pass
 
+
+class Ganaste(pilasengine.escenas.Escena):
+    def cuando_pulsa_tecla(self, *k, **kw):
+        pilas.escenas.PantallaBienvenida()
+
+    def iniciar(self):
+        self.crear_texto_ayuda()
+        self.pulsa_tecla_escape.conectar(self.cuando_pulsa_tecla)
+
+    def crear_texto_ayuda(self):
+        global puntajefinal
+        pilas.fondos.Color(pilas.colores.negro)
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/ganaste.jpg')
+
+        # texto_menu.rotacion = [0, 360 * 3]
+        texto_trucho = pilas.actores.Texto("Hiciste "+(str)(puntajefinal)+" Puntos")
+        texto_trucho.aprender("LimitadoABordesDePantalla")
+        texto_trucho.rotacion = [0, 360 * 3]
+        texto_trucho.y =75
+        texto_trucho.color = pilas.colores.Color(0, 255, 0, 255)
+        texto_trucho.escala = [0.1, 2.5]
+        self.pilas.avisar("Pulsa ESC para regresar")
+
+
+class GameOver(pilasengine.escenas.Escena):
+    def cuando_pulsa_tecla(self, *k, **kw):
+        pilas.escenas.PantallaBienvenida()
+
+    def iniciar(self):
+        pilas.fondos.Fondo("imagenes/pregunta.jpg")
+        self.crear_texto_ayuda()
+        self.pulsa_tecla_escape.conectar(self.cuando_pulsa_tecla)
+
+    def crear_texto_ayuda(self):
+        pilas.fondos.Color(pilas.colores.negro)
+        FondoMenu = pilas.fondos.Fondo()
+        FondoMenu.imagen = pilas.imagenes.cargar('imagenes/rip.png')
+        texto_menu = pilas.actores.Texto("Game Over")
+        print("band2")
+        texto_menu.y = 200
+        texto_menu.color = pilas.colores.Color(255, 0, 0, 0)
+        texto_menu.escala = [1, 4.5]
+        #texto_menu.rotacion = [0, 360 * 3]
+        texto_trucho = pilas.actores.Texto("Perdiste!")
+        texto_trucho.aprender("LimitadoABordesDePantalla")
+        texto_trucho.aprender("RebotarComoPelota")
+        texto_trucho.y = 150
+        texto_trucho.color = pilas.colores.Color(0, 0,255,255)
+        texto_trucho.escala = 3
+        self.pilas.avisar("Pulsa ESC para regresar")
+
+
+
+
+    def ejecutar(self):
+        pass
+
 class Ayuda(pilasengine.escenas.Escena):
 
     def iniciar(self):
@@ -517,8 +583,9 @@ pilas.actores.vincular(Proyectil)
 pilas.actores.vincular(BalaNivel2)
 pilas.actores.vincular(Pinguino)
 pilas.actores.vincular(Jugador)
-#pilas.actores.vincular(Energia)
 pilas.escenas.vincular(Ayuda)
+pilas.escenas.vincular(Ganaste)
+pilas.escenas.vincular(GameOver)
 pilas.escenas.vincular(SeleccionJugador)
 pilas.escenas.vincular(Cargar)
 pilas.escenas.vincular(Cargar2)
