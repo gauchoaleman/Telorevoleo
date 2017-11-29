@@ -1,7 +1,7 @@
 # Telorevoleo
 Juego en python utilizando la librería pilas engine (http://pilas-engine.com.ar/)
 
-##Instrucciones
+## Instrucciones
 
 El jugador se mueve con las flechas y dispara presionando espacio.
 
